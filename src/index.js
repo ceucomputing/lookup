@@ -1,7 +1,7 @@
 require('normalize.css/normalize.css');
 require('./styles/index.scss');
 
-const $ = require('jquery/dist/jquery.slim');
+const $ = require('jquery/dist/jquery');
 global.jQuery = $;
 
 require('bootstrap/dist/css/bootstrap.css');
@@ -40,6 +40,15 @@ require('jexcel/dist/js/jquery.jexcel');
 require('jexcel/dist/css/jquery.jexcel.css');
 
 document.addEventListener("DOMContentLoaded", () => {
+
+    const withLookup = false;
+
+    const titleView = $('#title');
+    const gameView = $('#game');
+    const contentView = $('#content');
+    const spreadsheetView = $('#spreadsheet');
+    const formView = $('#form');
+    const formBodyView = $('#form-body');
 
     const NAMES = [
         'Adam',
@@ -145,24 +154,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const N = 10;
 
-    var data = [
-        ['Name', 'Age', 'Height', '', 'Name', 'Height']
+    const data = [
+        withLookup ? ['Name', 'Age', 'Height', '', 'Name', 'Height'] : ['Name', 'Age', 'Height']
     ];
 
-    for (var i = 0; i < NAMES.length; ++i) {
-        data.push([NAMES[i], 12 + Math.floor(Math.random() * 5), 150 + Math.floor(Math.random() * 31)]);
-    }
+    const selected = new Array(N);
 
-    var selected = [];
-    var swapped = {};
-    for (var i = 0; i < N; ++i) {
-        var random = i + Math.floor(Math.random() * (NAMES.length - i));
-        selected.push(swapped[random] || random);
-        swapped[random] = swapped[i] || i;
-        data[i + 1] = data[i + 1].concat(['', NAMES[selected[i]]]);
-    }
+    const correct = new Array(N);
 
-    $('#spreadsheet').jexcel({
+    const initSettings = {
         data: data,
         allowInsertRow: false,
         allowManualInsertRow: false,
@@ -195,48 +195,140 @@ document.addEventListener("DOMContentLoaded", () => {
                 type: 'numeric'
             },
         ],
-        defaultColWidth: 100,
+        colWidths: withLookup ? [ 100, 100, 100, 100, 100, 200 ] : [ 100, 100, 100 ],
         rowDrag: false,
-    });
+        onchange: (obj, cell, val) => {
+            const index = parseInt(cell[0].id.split('-')[1]) - 1;
+            const value = parseInt(cell.text());
+            if (data[selected[index] + 1][2] == value) {
+                correct[index] = true;
+                cell.addClass('correct');
+            } else {
+                correct[index] = false;
+                cell.removeClass('correct');
+            }
+            checkEndGame();
+        }
+    };
 
-    $('#spreadsheet').jexcel('updateSettings', {
+    const updateSettings = {
         cells: function (cell, col, row) {
             if (col == 5) {
                 if (row >= 1 && row <= N) {
-                    $(cell).css('background-color', 'yellow');
+                    $(cell).addClass('input');
                 } else {
                     $(cell).addClass('readonly');
                 }
             }
-            if (row == 0) {
-                $(cell).css('font-weight', 'bold');
-            }
             if (col < 3) {
                 if (row == 0) {
-                    $(cell).css('background-color', 'silver');
-                    $(cell).css('border-top-color', 'gray');
+                    $(cell).addClass('header');
+                    $(cell).addClass('bordered-top');
                 }
                 if (col == 0) {
-                    $(cell).css('border-left-color', 'gray');
+                    $(cell).addClass('bordered-left');
                 }
-                $(cell).css('border-bottom-color', 'gray');
-                $(cell).css('border-right-color', 'gray');
+                $(cell).addClass('bordered');
             }
             if (col > 3) {
                 if (row == 0) {
-                    $(cell).css('background-color', 'silver');
-                    $(cell).css('border-top-color', 'gray');
+                    $(cell).addClass('header');
+                    $(cell).addClass('bordered-top');
                 }
                 if (row <= N) {
                     if (col == 4) {
-                        $(cell).css('border-left-color', 'gray');
+                        $(cell).addClass('bordered-left');
                     }
-                    $(cell).css('border-bottom-color', 'gray');
-                    $(cell).css('border-right-color', 'gray');
+                    $(cell).addClass('bordered');
                 }
             }
             $(cell).css('color', 'black');
         }
+    };
+
+    function startGame() {
+        for (var i = 0; i < NAMES.length; ++i) {
+            data[i + 1][1] = 12 + Math.floor(Math.random() * 5);
+            data[i + 1][2] = 150 + Math.floor(Math.random() * 31);
+        }
+
+        var swapped = {};
+        for (var i = 0; i < N; ++i) {
+            var random = i + Math.floor(Math.random() * (NAMES.length - i));
+            selected[i] = swapped[random] || random;
+            swapped[random] = swapped[i] || i;
+            correct[i] = false;
+        }
+
+        if (withLookup) {
+            for (var i = 0; i < N; ++i) {
+                data[i + 1][4] = NAMES[selected[i]];
+                data[i + 1][5] = '';
+            }
+        } else {
+            for (var i = 0; i < N; ++i) {
+                $('#name-' + i).text(NAMES[selected[i]]);
+            }
+            formView[0].reset();
+            formBodyView.find('input').removeClass('correct');
+        }
+
+        spreadsheetView.jexcel('setData', data);
+        contentView[0].scrollTop = 0;
+    }
+
+    function handleInput(event) {
+        const target = $(event.target);
+        const index = parseInt(target[0].id.split('-')[1]);
+        const value = parseInt(target[0].value);
+        if (data[selected[index] + 1][2] == value) {
+            correct[index] = true;
+            target.addClass('correct');
+        } else {
+            correct[index] = true;
+            target.removeClass('correct');
+        }
+        checkEndGame();
+    }
+
+    function checkEndGame() {
+        console.log(correct);
+    }
+
+    if (withLookup) {
+        spreadsheetView.removeClass('col-6');
+        spreadsheetView.addClass('col-12');
+        formView.hide();
+    } else {
+        var html = ''
+        for (var i = 0; i < N; ++i) {
+            html += '<tr><td id="name-' + i + '"></td><td><input id="value-' + i + '" type="number"></td></tr>';
+        }
+        formBodyView.html(html);
+        formBodyView.find('input').on('input', handleInput);
+    }
+
+    for (var i = 0; i < NAMES.length; ++i) {
+        data.push(withLookup ? [NAMES[i], '?', '?', '', '', ''] : [NAMES[i], '?', '?']);
+    }
+
+    spreadsheetView.jexcel(initSettings);
+    spreadsheetView.jexcel('updateSettings', updateSettings);
+
+    $('#start').on('click', () => {
+        titleView.slideUp();
+        gameView.slideDown();
+        startGame();
     });
+
+    $('#restart').on('click', () => {
+        startGame();
+    });
+
+    $('#quit').on('click', () => {
+        gameView.slideUp();
+        titleView.slideDown();
+    });
+
 
 });

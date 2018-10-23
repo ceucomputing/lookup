@@ -17,9 +17,60 @@
 
     <main role="main" class="container">
 
-        <h1>Basketball Sign-Ups</h1>
+        <div id="title" class="text-center">
+            <a id="howtoplay" href="#" class="btn btn-secondary">How to Play</a>
+            <a id="credits" href="#" class="btn btn-secondary">Credits</a>
+            <a id="start" href="#" class="btn btn-primary">Start Game</a>
+        </div>
 
-        <div id="spreadsheet"></div>
+        <div id="game">
+            <div id="hud">
+                <div class="row">
+                    <div class="col-6">
+                        <div class="card text-center">
+                            <h5 class="card-header">
+                                Menu
+                            </h5>
+                            <div class="card-body">
+                                <a id="restart" href="#" class="btn btn-primary">Restart</a>
+                                <a id="quit" href="#" class="btn btn-danger">Quit</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="card text-center">
+                            <h5 class="card-header">
+                                Time Left
+                            </h5>
+                            <div class="card-body">
+                                <div id="timeleft">10</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12 text-center">
+                        <p>Sam, please help me fill in the heights are these students...</p>
+                    </div>
+                </div>
+            </div>
+            <div id="content" class="row">
+                <div id="spreadsheet" class="col-6"></div>
+                <form id="form" class="col-6">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Height</th>
+                            </tr>
+                        </thead>
+                        <tbody id="form-body">
+
+                        </tbody>
+                    </table>
+                </form>
+            </div>
+        </div>
 
     </main><!-- /.container -->
 

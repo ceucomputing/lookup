@@ -1,4 +1,112 @@
+$wrong-color: yellow;
+$correct-color: palegreen;
+$hud-height: 13rem;
+
 .container {
-    padding-bottom: 1rem;
-    padding-top: 1rem;
+    margin: 0;
+    padding: 0;
+}
+
+#game {
+    // display: none;
+}
+
+// Title styles
+
+#title {
+    box-sizing: border-box;
+    height: 100vh;
+    padding: 1rem;
+}
+
+
+// HUD styles
+
+#hud {
+    box-sizing: border-box;
+    height: $hud-height;
+    margin: 0;
+    padding: 1rem;
+
+    .card-body {
+        box-sizing: border-box;
+        height: 5rem;
+    }
+
+    p {
+        font-size: 1.2rem;
+        padding: 1rem;
+    }
+}
+
+#timeleft {
+    font-size: 3rem;
+    margin-top: -1rem;
+}
+
+// Spreadsheet styles
+
+#content {
+    box-sizing: border-box;
+    height: calc(100vh - #{$hud-height});
+    overflow: auto;
+    padding: 1rem;
+}
+
+#spreadsheet {
+
+    table {
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .header {
+        background-color: silver;
+        font-weight: bold;
+    }
+
+    .input {
+        background-color: $wrong-color;
+    }
+
+    .input.correct {
+        background-color: $correct-color;
+    }
+
+    .jexcel>tbody>tr>td.bordered {
+        border-bottom-color: gray;
+        border-right-color: gray;
+    }
+
+    .jexcel>tbody>tr>td.bordered-left {
+        border-left-color: gray;
+    }
+
+    .jexcel>tbody>tr>td.bordered-top,
+    .jexcel>tbody>tr:first-child>td.bordered-top {
+        border-top-color: gray;
+    }
+
+}
+
+
+// Form styles
+
+#form {
+
+    table {
+        margin-left: auto;
+        margin-right: auto;
+        text-align: center;
+
+        input {
+            background-color: $wrong-color;
+            text-align: center;
+        }
+
+        input.correct {
+            background-color: $correct-color;
+        }
+    }
+
 }
