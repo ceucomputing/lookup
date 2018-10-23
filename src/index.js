@@ -1,25 +1,15 @@
-require('normalize.css/normalize.css');
-require('./styles/index.scss');
+import 'bootstrap/dist/css/bootstrap.css';
+import 'bootstrap/dist/js/bootstrap.bundle.min';
+import 'excel-formula/dist/excel-formula.min';
+import 'jexcel/dist/css/jquery.jexcel.css';
+import './styles/index.scss';
+import $ from 'jquery/dist/jquery';
+import formulajs from '@handsontable/formulajs/dist/formula';
+import Countdown from './Countdown';
 
-const $ = require('jquery/dist/jquery');
 global.jQuery = $;
+require('jexcel/dist/js/jquery.jexcel');
 
-require('bootstrap/dist/css/bootstrap.css');
-require('bootstrap/dist/js/bootstrap.bundle.min');
-
-function recursiveMapIf(predicate, fn, value) {
-    if (value.hasOwnProperty('length')) {
-        var result = [];
-        for (var i = 0; i < value.length; i++) {
-            result.push(recursiveMapIf(predicate, fn, value[i]));
-        }
-        return result;
-    }
-    if (predicate(value)) return fn(value);
-    return value;
-}
-
-const formulajs = require('@handsontable/formulajs/dist/formula');
 global.VLOOKUP = function (needle, table, index, rangeLookup) {
     if (needle.hasOwnProperty('v')) needle = needle.v;
     var firstColumn = table[0].k.match(/[A-Z]+/gi)[0];
@@ -35,16 +25,25 @@ global.VLOOKUP = function (needle, table, index, rangeLookup) {
     return formulajs.VLOOKUP(needle, newTable, index, rangeLookup);
 };
 
-require('excel-formula/dist/excel-formula.min');
-require('jexcel/dist/js/jquery.jexcel');
-require('jexcel/dist/css/jquery.jexcel.css');
+function recursiveMapIf(predicate, fn, value) {
+    if (value.hasOwnProperty('length')) {
+        var result = [];
+        for (var i = 0; i < value.length; i++) {
+            result.push(recursiveMapIf(predicate, fn, value[i]));
+        }
+        return result;
+    }
+    if (predicate(value)) return fn(value);
+    return value;
+}
 
 document.addEventListener("DOMContentLoaded", () => {
 
-    const withLookup = false;
+    const withLookup = true;
 
     const titleView = $('#title');
     const gameView = $('#game');
+    const timeLeftView = $('#timeleft');
     const contentView = $('#content');
     const spreadsheetView = $('#spreadsheet');
     const formView = $('#form');
@@ -154,12 +153,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const N = 10;
 
+    const TIME_LIMITS = [30, 20, 10];
+
     const data = [
         withLookup ? ['Name', 'Age', 'Height', '', 'Name', 'Height'] : ['Name', 'Age', 'Height']
     ];
 
     const selected = new Array(N);
-
     const correct = new Array(N);
 
     const initSettings = {
@@ -195,9 +195,10 @@ document.addEventListener("DOMContentLoaded", () => {
                 type: 'numeric'
             },
         ],
-        colWidths: withLookup ? [ 100, 100, 100, 100, 100, 200 ] : [ 100, 100, 100 ],
+        colWidths: withLookup ? [100, 100, 100, 100, 100, 200] : [100, 100, 100],
         rowDrag: false,
         onchange: (obj, cell, val) => {
+            if (!timer.isRunning()) return;
             const index = parseInt(cell[0].id.split('-')[1]) - 1;
             const value = parseInt(cell.text());
             if (data[selected[index] + 1][2] == value) {
@@ -246,6 +247,28 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     };
 
+    const timer = new Countdown((timeLeft, init) => {
+        if (init) {
+            if (withLookup) {
+                spreadsheetView.find('.input').removeClass('readonly');
+            } else {
+                formBodyView.find('input').prop('readonly', false);
+            }
+        }
+        if (timeLeft > 0) {
+            timeLeftView.text(timeLeft);
+        } else {
+            // TODO: handle losing
+            timeLeftView.text('Game Over');
+            if (withLookup) {
+                spreadsheetView.find('input').blur();
+                spreadsheetView.find('.input').addClass('readonly');
+            } else {
+                formBodyView.find('input').prop('readonly', true);
+            }
+        }
+    });
+
     function startGame() {
         for (var i = 0; i < NAMES.length; ++i) {
             data[i + 1][1] = 12 + Math.floor(Math.random() * 5);
@@ -273,11 +296,13 @@ document.addEventListener("DOMContentLoaded", () => {
             formBodyView.find('input').removeClass('correct');
         }
 
+        timer.start(TIME_LIMITS[difficulty]);
         spreadsheetView.jexcel('setData', data);
         contentView[0].scrollTop = 0;
     }
 
     function handleInput(event) {
+        if (!timer.isRunning()) return;
         const target = $(event.target);
         const index = parseInt(target[0].id.split('-')[1]);
         const value = parseInt(target[0].value);
@@ -285,7 +310,7 @@ document.addEventListener("DOMContentLoaded", () => {
             correct[index] = true;
             target.addClass('correct');
         } else {
-            correct[index] = true;
+            correct[index] = false;
             target.removeClass('correct');
         }
         checkEndGame();
@@ -293,7 +318,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function checkEndGame() {
         console.log(correct);
+        if (correct.every(x => x)) {
+            // TODO: do actual win
+            alert('You win!');
+            timer.clear();
+        }
     }
+
+    var difficulty = 0;
 
     if (withLookup) {
         spreadsheetView.removeClass('col-6');
@@ -316,6 +348,7 @@ document.addEventListener("DOMContentLoaded", () => {
     spreadsheetView.jexcel('updateSettings', updateSettings);
 
     $('#start').on('click', () => {
+        difficulty = 0;
         titleView.slideUp();
         gameView.slideDown();
         startGame();
@@ -326,9 +359,9 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     $('#quit').on('click', () => {
+        timer.clear();
         gameView.slideUp();
         titleView.slideDown();
     });
-
 
 });
