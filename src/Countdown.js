@@ -22,7 +22,7 @@ export default class {
         if (duration > 0) {
             this.timeLeft = duration;
             this.timer = setInterval(this.tick.bind(this), 1000);
-            this.tickFunction(this.timeLeft, true);
+            this.tickFunction(this.timeLeft);
         }
     }
 
@@ -32,7 +32,7 @@ export default class {
         if (this.timeLeft <= 0) {
             this.clear();
         }
-        this.tickFunction(this.timeLeft, false);
+        this.tickFunction(this.timeLeft);
     }
 
 }

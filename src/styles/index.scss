@@ -3,12 +3,13 @@ $correct-color: palegreen;
 $hud-height: 13rem;
 
 .container {
-    margin: 0;
+    margin-bottom: 0;
+    margin-top: 0;
     padding: 0;
 }
 
 #game {
-    // display: none;
+    display: none;
 }
 
 // Title styles
@@ -19,8 +20,13 @@ $hud-height: 13rem;
     padding: 1rem;
 }
 
-
 // HUD styles
+
+@keyframes blink {
+    50% {
+      opacity: 0;
+    }
+  }
 
 #hud {
     box-sizing: border-box;
@@ -34,7 +40,10 @@ $hud-height: 13rem;
     }
 
     p {
+        animation: blink 1s linear infinite;
         font-size: 1.2rem;
+        font-weight: bold;
+        margin: 0;
         padding: 1rem;
     }
 }
@@ -50,14 +59,12 @@ $hud-height: 13rem;
     box-sizing: border-box;
     height: calc(100vh - #{$hud-height});
     overflow: auto;
-    padding: 1rem;
 }
 
 #spreadsheet {
 
     table {
-        margin-left: auto;
-        margin-right: auto;
+        margin: 0 auto 1rem auto;
     }
 
     .header {
@@ -88,7 +95,6 @@ $hud-height: 13rem;
     }
 
 }
-
 
 // Form styles
 

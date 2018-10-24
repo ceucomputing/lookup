@@ -4,6 +4,7 @@ import 'excel-formula/dist/excel-formula.min';
 import 'jexcel/dist/css/jquery.jexcel.css';
 import './styles/index.scss';
 import $ from 'jquery/dist/jquery';
+import bootbox from 'bootbox/bootbox.min'
 import formulajs from '@handsontable/formulajs/dist/formula';
 import Countdown from './Countdown';
 
@@ -151,9 +152,9 @@ document.addEventListener("DOMContentLoaded", () => {
         'Ziqiang'
     ];
 
-    const N = 10;
+    const N = 20;
 
-    const TIME_LIMITS = [30, 20, 10];
+    const TIME_LIMITS = [60, 20, 10];
 
     const data = [
         withLookup ? ['Name', 'Age', 'Height', '', 'Name', 'Height'] : ['Name', 'Age', 'Height']
@@ -247,27 +248,33 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     };
 
-    const timer = new Countdown((timeLeft, init) => {
-        if (init) {
-            if (withLookup) {
-                spreadsheetView.find('.input').removeClass('readonly');
-            } else {
-                formBodyView.find('input').prop('readonly', false);
-            }
-        }
+    const timer = new Countdown((timeLeft) => {
         if (timeLeft > 0) {
             timeLeftView.text(timeLeft);
         } else {
-            // TODO: handle losing
+            // TODO: do actual lose
             timeLeftView.text('Game Over');
-            if (withLookup) {
-                spreadsheetView.find('input').blur();
-                spreadsheetView.find('.input').addClass('readonly');
-            } else {
-                formBodyView.find('input').prop('readonly', true);
-            }
+            lock();
+            bootbox.alert('Too Slow!', quitGame);
         }
     });
+
+    function lock() {
+        if (withLookup) {
+            spreadsheetView.find('input').blur();
+            spreadsheetView.find('.input').addClass('readonly');
+        } else {
+            formBodyView.find('input').prop('readonly', true);
+        }
+    }
+
+    function unlock() {
+        if (withLookup) {
+            spreadsheetView.find('.input').removeClass('readonly');
+        } else {
+            formBodyView.find('input').prop('readonly', false);
+        }
+    }
 
     function startGame() {
         for (var i = 0; i < NAMES.length; ++i) {
@@ -296,6 +303,7 @@ document.addEventListener("DOMContentLoaded", () => {
             formBodyView.find('input').removeClass('correct');
         }
 
+        unlock();
         timer.start(TIME_LIMITS[difficulty]);
         spreadsheetView.jexcel('setData', data);
         contentView[0].scrollTop = 0;
@@ -317,12 +325,27 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     function checkEndGame() {
-        console.log(correct);
         if (correct.every(x => x)) {
             // TODO: do actual win
-            alert('You win!');
             timer.clear();
+            lock();
+            bootbox.alert('Success!', quitGame);
         }
+    }
+
+    function showGame() {
+        titleView.slideUp();
+        gameView.slideDown();
+    }
+
+    function hideGame() {
+        gameView.slideUp();
+        titleView.slideDown();
+    }
+
+    function quitGame() {
+        timer.clear();
+        hideGame();
     }
 
     var difficulty = 0;
@@ -347,10 +370,9 @@ document.addEventListener("DOMContentLoaded", () => {
     spreadsheetView.jexcel(initSettings);
     spreadsheetView.jexcel('updateSettings', updateSettings);
 
-    $('#start').on('click', () => {
+    $('#easy').on('click', () => {
         difficulty = 0;
-        titleView.slideUp();
-        gameView.slideDown();
+        showGame();
         startGame();
     });
 
@@ -359,9 +381,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     $('#quit').on('click', () => {
-        timer.clear();
-        gameView.slideUp();
-        titleView.slideDown();
+        quitGame();
     });
 
 });
