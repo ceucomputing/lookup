@@ -12,6 +12,28 @@ $hud-height: 13rem;
     display: none;
 }
 
+// Dialog styles
+
+.dialog {
+    display: none;
+}
+
+.bootbox {
+
+    .modal-dialog {
+        max-width: 800px;
+    }
+
+    .modal-header {
+        display: block;
+    }
+
+    .bootbox-body {
+        text-align: center;
+    }
+
+}
+
 // Title styles
 
 #title {
@@ -24,11 +46,12 @@ $hud-height: 13rem;
 
 @keyframes blink {
     50% {
-      opacity: 0;
+        opacity: 0;
     }
-  }
+}
 
 #hud {
+
     box-sizing: border-box;
     height: $hud-height;
     margin: 0;
@@ -46,6 +69,7 @@ $hud-height: 13rem;
         margin: 0;
         padding: 1rem;
     }
+
 }
 
 #timeleft {

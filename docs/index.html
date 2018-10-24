@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Lookup Functions</title>
+    <!-- Mobile header color for Chrome, Firefox OS and Opera -->
+    <meta name="theme-color" content="#ff4970">
+    <!-- Mobile header color Windows Phone -->
+    <meta name="msapplication-navbutton-color" content="#ff4970">
+    <!-- Mobile header color for iOS Safari (supports black, black-translucent or default) -->
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+<link rel="apple-touch-icon" sizes="57x57" href="icons-5b1f36bc41ab31f5b801d48ba1d65781/apple-touch-icon-57x57.png"><link rel="apple-touch-icon" sizes="60x60" href="icons-5b1f36bc41ab31f5b801d48ba1d65781/apple-touch-icon-60x60.png"><link rel="apple-touch-icon" sizes="72x72" href="icons-5b1f36bc41ab31f5b801d48ba1d65781/apple-touch-icon-72x72.png"><link rel="apple-touch-icon" sizes="76x76" href="icons-5b1f36bc41ab31f5b801d48ba1d65781/apple-touch-icon-76x76.png"><link rel="apple-touch-icon" sizes="114x114" href="icons-5b1f36bc41ab31f5b801d48ba1d65781/apple-touch-icon-114x114.png"><link rel="apple-touch-icon" sizes="120x120" href="icons-5b1f36bc41ab31f5b801d48ba1d65781/apple-touch-icon-120x120.png"><link rel="apple-touch-icon" sizes="144x144" href="icons-5b1f36bc41ab31f5b801d48ba1d65781/apple-touch-icon-144x144.png"><link rel="apple-touch-icon" sizes="152x152" href="icons-5b1f36bc41ab31f5b801d48ba1d65781/apple-touch-icon-152x152.png"><link rel="apple-touch-icon" sizes="180x180" href="icons-5b1f36bc41ab31f5b801d48ba1d65781/apple-touch-icon-180x180.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="lookup}}"><meta name="mobile-web-app-capable" content="yes"><meta name="theme-color" content="#fff"><meta name="application-name" content="lookup}}"><link rel="icon" type="image/png" sizes="32x32" href="icons-5b1f36bc41ab31f5b801d48ba1d65781/favicon-32x32.png"><link rel="icon" type="image/png" sizes="16x16" href="icons-5b1f36bc41ab31f5b801d48ba1d65781/favicon-16x16.png"><link rel="shortcut icon" href="icons-5b1f36bc41ab31f5b801d48ba1d65781/favicon.ico"><link rel="apple-touch-startup-image" media="(device-width: 320px) and (device-height: 480px) and (-webkit-device-pixel-ratio: 1)" href="icons-5b1f36bc41ab31f5b801d48ba1d65781/apple-touch-startup-image-320x460.png"><link rel="apple-touch-startup-image" media="(device-width: 320px) and (device-height: 480px) and (-webkit-device-pixel-ratio: 2)" href="icons-5b1f36bc41ab31f5b801d48ba1d65781/apple-touch-startup-image-640x920.png"><link rel="apple-touch-startup-image" media="(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2)" href="icons-5b1f36bc41ab31f5b801d48ba1d65781/apple-touch-startup-image-640x1096.png"><link rel="apple-touch-startup-image" media="(device-width: 375px) and (device-height: 667px) and (-webkit-device-pixel-ratio: 2)" href="icons-5b1f36bc41ab31f5b801d48ba1d65781/apple-touch-startup-image-750x1294.png"><link rel="apple-touch-startup-image" media="(device-width: 414px) and (device-height: 736px) and (orientation: landscape) and (-webkit-device-pixel-ratio: 3)" href="icons-5b1f36bc41ab31f5b801d48ba1d65781/apple-touch-startup-image-1182x2208.png"><link rel="apple-touch-startup-image" media="(device-width: 414px) and (device-height: 736px) and (orientation: portrait) and (-webkit-device-pixel-ratio: 3)" href="icons-5b1f36bc41ab31f5b801d48ba1d65781/apple-touch-startup-image-1242x2148.png"><link rel="apple-touch-startup-image" media="(device-width: 768px) and (device-height: 1024px) and (orientation: landscape) and (-webkit-device-pixel-ratio: 1)" href="icons-5b1f36bc41ab31f5b801d48ba1d65781/apple-touch-startup-image-748x1024.png"><link rel="apple-touch-startup-image" media="(device-width: 768px) and (device-height: 1024px) and (orientation: portrait) and (-webkit-device-pixel-ratio: 1)" href="icons-5b1f36bc41ab31f5b801d48ba1d65781/apple-touch-startup-image-768x1004.png"><link rel="apple-touch-startup-image" media="(device-width: 768px) and (device-height: 1024px) and (orientation: landscape) and (-webkit-device-pixel-ratio: 2)" href="icons-5b1f36bc41ab31f5b801d48ba1d65781/apple-touch-startup-image-1496x2048.png"><link rel="apple-touch-startup-image" media="(device-width: 768px) and (device-height: 1024px) and (orientation: portrait) and (-webkit-device-pixel-ratio: 2)" href="icons-5b1f36bc41ab31f5b801d48ba1d65781/apple-touch-startup-image-1536x2008.png"><link href="styles.8ecf7c9d3e5c6b180ba9.css" rel="stylesheet"></head>
+
+<body>
+
+    <main role="main" class="container">
+
+        <div id="title" class="text-center">
+            <p><img src="howtoplay.9faf86af3897da31a491.png" alt="How to Attempt the Lookup Challenge"></p>
+            <!-- <a id="howtoplay" href="#" class="btn btn-secondary">How to Play</a>
+            <a id="credits" href="#" class="btn btn-secondary">Credits</a> -->
+            <p><a id="easy" href="#" class="btn btn-primary">Start Challenge</a></p>
+            <!-- <a id="hard" href="#" class="btn btn-warning">Hard (20s)</a>
+            <a id="extreme" href="#" class="btn btn-danger">Extreme (10s)</a> -->
+        </div>
+
+        <div id="game">
+            <div id="hud">
+                <div class="row">
+                    <div class="col-6">
+                        <div class="card text-center">
+                            <h5 class="card-header">
+                                Menu
+                            </h5>
+                            <div class="card-body">
+                                <!-- <a id="restart" href="#" class="btn btn-secondary">Restart</a> -->
+                                <a id="quit" href="#" class="btn btn-danger">Exit Challenge</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="card text-center">
+                            <h5 class="card-header">
+                                Time Left
+                            </h5>
+                            <div class="card-body">
+                                <div id="timeleft">10</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12 text-center">
+                        <p>Help your teacher fill in the correct heights on the right!</p>
+                    </div>
+                </div>
+            </div>
+            <div id="content" class="row">
+                <div id="spreadsheet" class="col-6"></div>
+                <form id="form" class="col-6">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Height</th>
+                            </tr>
+                        </thead>
+                        <tbody id="form-body">
+
+                        </tbody>
+                    </table>
+                </form>
+            </div>
+        </div>
+
+    </main><!-- /.container -->
+
+    <div id="win" class="dialog">
+        <img src="win.dd3df087171a7c1b3a8b.png" alt="Success!">
+    </div>
+
+    <div id="lose" class="dialog">
+        <img src="lose.a6305075cf5a216f678d.png" alt="Too Slow!">
+    </div>
+
+<script type="text/javascript" src="main.57ba4861a91e76d24e5f.js"></script></body>
+
+</html>

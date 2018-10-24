@@ -50,6 +50,9 @@ document.addEventListener("DOMContentLoaded", () => {
     const formView = $('#form');
     const formBodyView = $('#form-body');
 
+    const winDialog = $('#win');
+    const loseDialog = $('#lose');
+
     const NAMES = [
         'Adam',
         'Adrian',
@@ -252,10 +255,13 @@ document.addEventListener("DOMContentLoaded", () => {
         if (timeLeft > 0) {
             timeLeftView.text(timeLeft);
         } else {
-            // TODO: do actual lose
             timeLeftView.text('Game Over');
             lock();
-            bootbox.alert('Too Slow!', quitGame);
+            bootbox.alert({
+                title: 'Time\'s Up!',
+                message: loseDialog.html(),
+                callback: quitGame
+            });
         }
     });
 
@@ -285,8 +291,8 @@ document.addEventListener("DOMContentLoaded", () => {
         var swapped = {};
         for (var i = 0; i < N; ++i) {
             var random = i + Math.floor(Math.random() * (NAMES.length - i));
-            selected[i] = swapped[random] || random;
-            swapped[random] = swapped[i] || i;
+            selected[i] = (swapped[random] === undefined) ? random : swapped[random];
+            swapped[random] = (swapped[i] === undefined) ? i : swapped[i];
             correct[i] = false;
         }
 
@@ -326,10 +332,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function checkEndGame() {
         if (correct.every(x => x)) {
-            // TODO: do actual win
             timer.clear();
             lock();
-            bootbox.alert('Success!', quitGame);
+            bootbox.alert({
+                title: 'Congratulations',
+                message: winDialog.html(),
+                callback: quitGame
+            });
         }
     }
 

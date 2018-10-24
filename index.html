@@ -18,9 +18,10 @@
     <main role="main" class="container">
 
         <div id="title" class="text-center">
-            <a id="howtoplay" href="#" class="btn btn-secondary">How to Play</a>
-            <!-- <a id="credits" href="#" class="btn btn-secondary">Credits</a> -->
-            <a id="easy" href="#" class="btn btn-primary">Start Game</a>
+            <p><img src="<%= require('./src/assets/howtoplay.png') %>" alt="How to Attempt the Lookup Challenge"></p>
+            <!-- <a id="howtoplay" href="#" class="btn btn-secondary">How to Play</a>
+            <a id="credits" href="#" class="btn btn-secondary">Credits</a> -->
+            <p><a id="easy" href="#" class="btn btn-primary">Start Challenge</a></p>
             <!-- <a id="hard" href="#" class="btn btn-warning">Hard (20s)</a>
             <a id="extreme" href="#" class="btn btn-danger">Extreme (10s)</a> -->
         </div>
@@ -35,7 +36,7 @@
                             </h5>
                             <div class="card-body">
                                 <!-- <a id="restart" href="#" class="btn btn-secondary">Restart</a> -->
-                                <a id="quit" href="#" class="btn btn-danger">Exit Game</a>
+                                <a id="quit" href="#" class="btn btn-danger">Exit Challenge</a>
                             </div>
                         </div>
                     </div>
@@ -75,6 +76,14 @@
         </div>
 
     </main><!-- /.container -->
+
+    <div id="win" class="dialog">
+        <img src="<%= require('./src/assets/win.png') %>" alt="Success!">
+    </div>
+
+    <div id="lose" class="dialog">
+        <img src="<%= require('./src/assets/lose.png') %>" alt="Too Slow!">
+    </div>
 
 </body>
 
