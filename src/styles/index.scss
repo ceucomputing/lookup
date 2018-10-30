@@ -1,6 +1,7 @@
-$wrong-color: yellow;
+$blank-color: yellow;
+$wrong-color: pink;
 $correct-color: palegreen;
-$hud-height: 13rem;
+$hud-height: 7rem;
 
 .container {
     margin-bottom: 0;
@@ -39,35 +40,24 @@ $hud-height: 13rem;
 #title {
     box-sizing: border-box;
     height: 100vh;
-    padding: 1rem;
+    padding: 2rem;
 }
 
 // HUD styles
 
-@keyframes blink {
-    50% {
-        opacity: 0;
-    }
-}
-
 #hud {
-
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
     box-sizing: border-box;
     height: $hud-height;
     margin: 0;
     padding: 1rem;
+    position: relative;
 
     .card-body {
         box-sizing: border-box;
         height: 5rem;
-    }
-
-    p {
-        animation: blink 1s linear infinite;
-        font-size: 1.2rem;
-        font-weight: bold;
-        margin: 0;
-        padding: 1rem;
     }
 
 }
@@ -83,12 +73,13 @@ $hud-height: 13rem;
     box-sizing: border-box;
     height: calc(100vh - #{$hud-height});
     overflow: auto;
+    padding: 1rem;
 }
 
 #spreadsheet {
 
     table {
-        margin: 0 auto 1rem auto;
+        margin: 0 0 1rem auto;
     }
 
     .header {
@@ -97,11 +88,15 @@ $hud-height: 13rem;
     }
 
     .input {
-        background-color: $wrong-color;
+        background-color: $blank-color;
     }
 
     .input.correct {
         background-color: $correct-color;
+    }
+
+    .input.wrong {
+        background-color: $wrong-color;
     }
 
     .jexcel>tbody>tr>td.bordered {
@@ -120,23 +115,7 @@ $hud-height: 13rem;
 
 }
 
-// Form styles
-
-#form {
-
-    table {
-        margin-left: auto;
-        margin-right: auto;
-        text-align: center;
-
-        input {
-            background-color: $wrong-color;
-            text-align: center;
-        }
-
-        input.correct {
-            background-color: $correct-color;
-        }
-    }
-
+#hint {
+    color: red;
+    margin: 2rem 0;
 }

@@ -19,59 +19,48 @@
 
         <div id="title" class="text-center">
             <p><img src="<%= require('./src/assets/howtoplay.png') %>" alt="How to Attempt the Lookup Challenge"></p>
-            <!-- <a id="howtoplay" href="#" class="btn btn-secondary">How to Play</a>
-            <a id="credits" href="#" class="btn btn-secondary">Credits</a> -->
-            <p><a id="easy" href="#" class="btn btn-primary">Start Challenge</a></p>
-            <!-- <a id="hard" href="#" class="btn btn-warning">Hard (20s)</a>
-            <a id="extreme" href="#" class="btn btn-danger">Extreme (10s)</a> -->
+            <p>
+                <a id="howtoplay" href="#" class="btn btn-secondary btn-lg">How to Play</a>
+                <!-- <a id="credits" href="#" class="btn btn-secondary">Credits</a> -->
+                <a id="easy" href="#" class="btn btn-primary btn-lg">Start Challenge</a>
+                <!-- <a id="hard" href="#" class="btn btn-warning">Hard (20s)</a>
+                <a id="extreme" href="#" class="btn btn-danger">Extreme (10s)</a> -->
+            </p>
         </div>
 
         <div id="game">
+            <div id="content" class="row">
+                <div id="spreadsheet" class="col-9"></div>
+                <div id="spreadsheet" class="col-3">
+                    <p>Help your teacher fill in the missing heights here!<br>
+                        <img src="<%= require('./src/assets/arrow.png') %>" alt="Left Arrow"></p>
+                    <div id="hint" class="card border-danger">
+                        <div class="card-body">
+                            <h5 class="card-title">Warning</h5>
+                            <p class="card-text">You've filled in the heights, but not all of them are correct! Check
+                                your answers before time runs out!</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <div id="hud">
                 <div class="row">
                     <div class="col-6">
                         <div class="card text-center">
-                            <h5 class="card-header">
-                                Menu
-                            </h5>
                             <div class="card-body">
-                                <!-- <a id="restart" href="#" class="btn btn-secondary">Restart</a> -->
-                                <a id="quit" href="#" class="btn btn-danger">Exit Challenge</a>
+                                <div id="timeleft"><b>Time Left:</b> 10</div>
                             </div>
                         </div>
                     </div>
                     <div class="col-6">
                         <div class="card text-center">
-                            <h5 class="card-header">
-                                Time Left
-                            </h5>
                             <div class="card-body">
-                                <div id="timeleft">10</div>
+                                <!-- <a id="restart" href="#" class="btn btn-secondary">Restart</a> -->
+                                <a id="quit" href="#" class="btn btn-danger btn-lg">Exit Challenge</a>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col-12 text-center">
-                        <p>Help your teacher fill in the correct heights on the right!</p>
-                    </div>
-                </div>
-            </div>
-            <div id="content" class="row">
-                <div id="spreadsheet" class="col-6"></div>
-                <form id="form" class="col-6">
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th>Name</th>
-                                <th>Height</th>
-                            </tr>
-                        </thead>
-                        <tbody id="form-body">
-
-                        </tbody>
-                    </table>
-                </form>
             </div>
         </div>
 
@@ -82,7 +71,10 @@
     </div>
 
     <div id="lose" class="dialog">
-        <img src="<%= require('./src/assets/lose.png') %>" alt="Too Slow!">
+        <p><img src="<%= require('./src/assets/lose.png') %>" alt="Too Slow!"></p>
+        <p>You got <span id="score"></span> out of <span id="N"></span> heights correct.</p>
+        <p><b>Note: This challenge is much easier with formulas.</b><br>
+            <i>If you don't know about VLOOKUP yet, you may wish to try again later.</i></p>
     </div>
 
 </body>

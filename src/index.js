@@ -40,15 +40,14 @@ function recursiveMapIf(predicate, fn, value) {
 
 document.addEventListener("DOMContentLoaded", () => {
 
-    const withLookup = true;
-
     const titleView = $('#title');
     const gameView = $('#game');
     const timeLeftView = $('#timeleft');
     const contentView = $('#content');
     const spreadsheetView = $('#spreadsheet');
-    const formView = $('#form');
-    const formBodyView = $('#form-body');
+    const scoreView = $('#score');
+    const NView = $('#N');
+    const hintView = $('#hint');
 
     const winDialog = $('#win');
     const loseDialog = $('#lose');
@@ -160,11 +159,12 @@ document.addEventListener("DOMContentLoaded", () => {
     const TIME_LIMITS = [60, 20, 10];
 
     const data = [
-        withLookup ? ['Name', 'Age', 'Height', '', 'Name', 'Height'] : ['Name', 'Age', 'Height']
+        ['Name', 'Age', 'Height', '', 'Name', 'Height']
     ];
 
     const selected = new Array(N);
     const correct = new Array(N);
+    const dirty = new Array(N);
 
     const initSettings = {
         data: data,
@@ -199,18 +199,21 @@ document.addEventListener("DOMContentLoaded", () => {
                 type: 'numeric'
             },
         ],
-        colWidths: withLookup ? [100, 100, 100, 100, 100, 200] : [100, 100, 100],
+        colWidths: [100, 100, 100, 100, 100, 200],
         rowDrag: false,
         onchange: (obj, cell, val) => {
             if (!timer.isRunning()) return;
             const index = parseInt(cell[0].id.split('-')[1]) - 1;
             const value = parseInt(cell.text());
+            dirty[index] = true;
             if (data[selected[index] + 1][2] == value) {
                 correct[index] = true;
                 cell.addClass('correct');
+                cell.removeClass('wrong');
             } else {
                 correct[index] = false;
                 cell.removeClass('correct');
+                cell.addClass('wrong');
             }
             checkEndGame();
         }
@@ -253,10 +256,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const timer = new Countdown((timeLeft) => {
         if (timeLeft > 0) {
-            timeLeftView.text(timeLeft);
+            timeLeftView.html('<b>Time Left:</b> ' + timeLeft);
         } else {
-            timeLeftView.text('Game Over');
+            timeLeftView.html('<b>Game Over</b>');
             lock();
+            scoreView.text(correct.reduce((acc, cur) => acc + cur, 0).toString());
             bootbox.alert({
                 title: 'Time\'s Up!',
                 message: loseDialog.html(),
@@ -266,20 +270,12 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     function lock() {
-        if (withLookup) {
-            spreadsheetView.find('input').blur();
-            spreadsheetView.find('.input').addClass('readonly');
-        } else {
-            formBodyView.find('input').prop('readonly', true);
-        }
+        spreadsheetView.find('input').blur();
+        spreadsheetView.find('.input').addClass('readonly');
     }
 
     function unlock() {
-        if (withLookup) {
-            spreadsheetView.find('.input').removeClass('readonly');
-        } else {
-            formBodyView.find('input').prop('readonly', false);
-        }
+        spreadsheetView.find('.input').removeClass('readonly');
     }
 
     function startGame() {
@@ -294,40 +290,19 @@ document.addEventListener("DOMContentLoaded", () => {
             selected[i] = (swapped[random] === undefined) ? random : swapped[random];
             swapped[random] = (swapped[i] === undefined) ? i : swapped[i];
             correct[i] = false;
+            dirty[i] = false;
         }
 
-        if (withLookup) {
-            for (var i = 0; i < N; ++i) {
-                data[i + 1][4] = NAMES[selected[i]];
-                data[i + 1][5] = '';
-            }
-        } else {
-            for (var i = 0; i < N; ++i) {
-                $('#name-' + i).text(NAMES[selected[i]]);
-            }
-            formView[0].reset();
-            formBodyView.find('input').removeClass('correct');
+        for (var i = 0; i < N; ++i) {
+            data[i + 1][4] = NAMES[selected[i]];
+            data[i + 1][5] = '';
         }
 
         unlock();
         timer.start(TIME_LIMITS[difficulty]);
         spreadsheetView.jexcel('setData', data);
         contentView[0].scrollTop = 0;
-    }
-
-    function handleInput(event) {
-        if (!timer.isRunning()) return;
-        const target = $(event.target);
-        const index = parseInt(target[0].id.split('-')[1]);
-        const value = parseInt(target[0].value);
-        if (data[selected[index] + 1][2] == value) {
-            correct[index] = true;
-            target.addClass('correct');
-        } else {
-            correct[index] = false;
-            target.removeClass('correct');
-        }
-        checkEndGame();
+        hintView.hide();
     }
 
     function checkEndGame() {
@@ -339,6 +314,8 @@ document.addEventListener("DOMContentLoaded", () => {
                 message: winDialog.html(),
                 callback: quitGame
             });
+        } else if (dirty.every(x => x)) {
+            hintView.show();
         }
     }
 
@@ -357,23 +334,12 @@ document.addEventListener("DOMContentLoaded", () => {
         hideGame();
     }
 
+    NView.text(N.toString());
+
     var difficulty = 0;
 
-    if (withLookup) {
-        spreadsheetView.removeClass('col-6');
-        spreadsheetView.addClass('col-12');
-        formView.hide();
-    } else {
-        var html = ''
-        for (var i = 0; i < N; ++i) {
-            html += '<tr><td id="name-' + i + '"></td><td><input id="value-' + i + '" type="number"></td></tr>';
-        }
-        formBodyView.html(html);
-        formBodyView.find('input').on('input', handleInput);
-    }
-
     for (var i = 0; i < NAMES.length; ++i) {
-        data.push(withLookup ? [NAMES[i], '?', '?', '', '', ''] : [NAMES[i], '?', '?']);
+        data.push([NAMES[i], '?', '?', '', '', '']);
     }
 
     spreadsheetView.jexcel(initSettings);
