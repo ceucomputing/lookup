@@ -51,6 +51,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const winDialog = $('#win');
     const loseDialog = $('#lose');
+    const howToPlayDialog = $('#howtoplay');
+    const howToPlayHTML = howToPlayDialog.html();
+    howToPlayDialog.empty();
 
     const NAMES = [
         'Adam',
@@ -357,6 +360,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
     $('#quit').on('click', () => {
         quitGame();
+    });
+
+    $('#howtoplay-button').on('click', () => {
+        bootbox.alert({
+            title: 'How to Play',
+            message: howToPlayHTML
+        });
     });
 
 });

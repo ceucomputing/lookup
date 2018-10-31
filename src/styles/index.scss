@@ -40,7 +40,17 @@ $hud-height: 7rem;
 #title {
     box-sizing: border-box;
     height: 100vh;
-    padding: 2rem;
+    padding: 5rem;
+
+    img {
+        width: 100%;
+    }
+}
+
+// How to Play styles
+
+.carousel-control-prev, .carousel-control-next {
+    background-color: rgba(0, 0, 0, 0.5);
 }
 
 // HUD styles
